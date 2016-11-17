@@ -4,11 +4,6 @@ using System.Collections;
 public class Book_Control : MonoBehaviour {
 
 	public float rotationSpeed = 10f;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
 	
 	// Update is called once per frame
 	void Update () {

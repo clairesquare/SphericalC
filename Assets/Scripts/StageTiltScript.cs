@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelTiltScript : MonoBehaviour {
+public class StageTiltScript : MonoBehaviour {
 
 	// How steep the angle of the tilt is depending on which key is currently held.
 	public float gentleAngleRadians = 10.0f;

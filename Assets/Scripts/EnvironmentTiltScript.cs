@@ -3,58 +3,63 @@ using System.Collections;
 
 public class EnvironmentTiltScript : MonoBehaviour {
 
+	// How steep the angle of the tilt is depending on which key is currently held.
+	public float gentleAngleRadians = 10.0f;
+	public float normalAngleRadians = 15.0f;
+	public float steepAngleRadians = 20.0f;
+
+	// How quickly the environment rotates to the given steepness.
 	public float rotationSpeed = 10f;
-	public float boostMultiplier = 2f;
 
 	Rigidbody rb;
+	Vector3 targetRotation;
+	Quaternion startingRotation;
+
 
 	void Start() {
 		rb = GetComponent<Rigidbody> ();
+		startingRotation = transform.rotation;
 	}
 
 
 	void Update()
 	{
-		// Make sure the Y rotation is always 0. (For some reason, it kept getting rotated during FixedUpdate so I just made sure it is always reset to 0 no matter what.)
-		Vector3 zeroYRotation = transform.eulerAngles;
-		zeroYRotation.y = 0.0f;
-		transform.rotation = Quaternion.Euler(zeroYRotation);
+		// HANDLE INPUT //
+
+		// Get the tilt steepness based on the angle key being held.
+		float rotationAngle = normalAngleRadians;
+
+		if (Input.GetButton ("Steep Angle")) {
+			rotationAngle = steepAngleRadians;
+		} else if (Input.GetButton ("Gentle Angle")) {
+			rotationAngle = gentleAngleRadians;
+		}
+
+		// Reset the target rotation to the starting position.
+		targetRotation = startingRotation.eulerAngles;
+
+		// Modify the target rotation based on the direction keys currently being held.
+		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
+			targetRotation.z = rotationAngle;
+		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
+			targetRotation.z = -rotationAngle;
+		}
+
+		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
+			targetRotation.x = -rotationAngle;
+		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
+			targetRotation.x = rotationAngle;
+		}
 	}
 
 	
 	void FixedUpdate ()
 	{
-		// HANDLE INPUT //
+		// Move the rotation of the environment towards the target rotation.
+		Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(targetRotation), rotationSpeed*Time.deltaTime);
+		rb.MoveRotation (newRotation);
 
-		// I changed this section to make it more readable and to make it so that you can rotate diagonally by holding down two directions at once. -Dennis
-
-		Vector3 newRotation = new Vector3 (0f, 0f, 0f);
-
-		if (Input.GetAxisRaw("Horizontal") < 0.0f) {
-			newRotation.z = rotationSpeed*Time.deltaTime;
-        }
-
-		else if (Input.GetAxisRaw("Horizontal") > 0.0f) {
-			newRotation.z = -rotationSpeed*Time.deltaTime;
-        }	
-
-		if (Input.GetAxisRaw("Vertical") < 0.0f) {
-			newRotation.x = -rotationSpeed*Time.deltaTime;
-        }
-
-		else if (Input.GetAxisRaw("Vertical") > 0.0f) {
-			newRotation.x = rotationSpeed*Time.deltaTime;
-        }
-
-		if (Input.GetButton ("Rotation Speed Boost")) {
-			newRotation *= boostMultiplier;
-		}
-
-		rb.MoveRotation(rb.rotation*Quaternion.Euler(newRotation));
-
-
-
-		// Longxiao had this code commented out... I'm not sure what it does, but I left it here just in case we can use it later.
+		// Longxiao had this code commented out... I'm not sure what it does, but I left it here just in case we can use it later.  //
 
 		//this.gameObject.GetComponent<Rigidbody>().AddRelativeTorque(0f, 0f, 100f);
 

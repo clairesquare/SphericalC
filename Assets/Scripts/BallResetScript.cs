@@ -11,6 +11,7 @@ public class BallResetScript : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Ball") {
+			collider.GetComponent<BallScript> ().SendMessage ("RemoveFromPlay");
 			ballSpawnerScript.SendMessage ("SpawnNewBall");
 		}
 	}

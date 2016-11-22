@@ -6,10 +6,10 @@ public class StageTiltScript : MonoBehaviour {
 	// How steep the angle of the tilt is depending on which key is currently held.
 	public float gentleAngleRadians = 10.0f;
 	public float normalAngleRadians = 15.0f;
-	public float steepAngleRadians = 20.0f;
+	public float steepAngleRadians = 30.0f;
 
 	// How quickly the environment rotates to the given steepness.
-	public float rotationSpeed = 10f;
+	public float rotationSpeed = 125.0f;
 
 	Rigidbody rb;
 	Vector3 targetRotation;

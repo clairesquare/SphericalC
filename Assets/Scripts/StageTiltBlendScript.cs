@@ -4,9 +4,9 @@ using System.Collections;
 public class StageTiltBlendScript : MonoBehaviour {
 
 	// How steep the angle of the tilt is depending on which key is currently held.
-	public float gentleAngleRadians = 10.0f;
-	public float normalAngleRadians = 15.0f;
-	public float steepAngleRadians = 30.0f;
+	public float gentleSlopeMultiplier = 0.1f;
+	public float middleSlopeMultiplier = 0.5f;
+	public float steepSlopeMultiplier = 1f;
 
 	// How quickly the environment rotates to the given steepness.
 	public float rotationSpeed = 125.0f;
@@ -19,9 +19,6 @@ public class StageTiltBlendScript : MonoBehaviour {
 
 
 	void Start() {
-		rb = GetComponent<Rigidbody> ();
-		startingRotation = transform.rotation;
-
 		animator = GetComponent<Animator> ();
 	}
 
@@ -30,35 +27,20 @@ public class StageTiltBlendScript : MonoBehaviour {
 	{
 		// HANDLE INPUT //
 
-		// Get the tilt steepness based on the angle key being held.
-		float rotationAngle = normalAngleRadians;
+		// Get the slope multiplier based on the key being held.
+		float slopeMultiplier = gentleSlopeMultiplier;
 
-		if (Input.GetButton ("Steep Angle")) {
-			rotationAngle = steepAngleRadians;
-		} else if (Input.GetButton ("Gentle Angle")) {
-			rotationAngle = gentleAngleRadians;
+		if (Input.GetButton ("Middle Slope")) {
+			slopeMultiplier = middleSlopeMultiplier;
+		} else if (Input.GetButton ("Steep Slope")) {
+			slopeMultiplier = steepSlopeMultiplier;
 		}
 
-		// Reset the target rotation to the starting position.
-		targetRotation = startingRotation.eulerAngles;
+		float blendTreeX = Input.GetAxis ("Horizontal") * slopeMultiplier;
+		float blendTreeY = Input.GetAxis ("Vertical") * slopeMultiplier;
 
-		// Modify the target rotation based on the direction keys currently being held.
-//		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
-//			animator.SetFloat ("axisX", -1);
-//		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
-//			animator.SetFloat ("axisY", 1);
-//		}
-//
-//		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
-//			targetRotation.x = -rotationAngle;
-//		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
-//			targetRotation.x = rotationAngle;
-//		}
-
-		Debug.Log (Input.GetAxis ("Horizontal"));
-
-		animator.SetFloat ("axisX", Input.GetAxis ("Horizontal"));
-		animator.SetFloat ("axisY", Input.GetAxis ("Vertical"));
+		animator.SetFloat ("axisX", blendTreeX);
+		animator.SetFloat ("axisY", blendTreeY);
 	}
 
 

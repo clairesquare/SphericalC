@@ -55,6 +55,8 @@ public class StageTiltBlendScript : MonoBehaviour {
 //			targetRotation.x = rotationAngle;
 //		}
 
+		Debug.Log (Input.GetAxis ("Horizontal"));
+
 		animator.SetFloat ("axisX", Input.GetAxis ("Horizontal"));
 		animator.SetFloat ("axisY", Input.GetAxis ("Vertical"));
 	}
@@ -63,8 +65,8 @@ public class StageTiltBlendScript : MonoBehaviour {
 	void FixedUpdate ()
 	{
 		// Move the rotation of the environment towards the target rotation.
-		Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(targetRotation), rotationSpeed*Time.deltaTime);
-		rb.MoveRotation (newRotation);
+//		Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(targetRotation), rotationSpeed*Time.deltaTime);
+//		rb.MoveRotation (newRotation);
 
 		// Longxiao had this code commented out... I'm not sure what it does, but I left it here just in case we can use it later.  //
 

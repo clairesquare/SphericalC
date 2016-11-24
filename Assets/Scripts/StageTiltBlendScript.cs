@@ -9,7 +9,10 @@ public class StageTiltBlendScript : MonoBehaviour {
 	public float steepSlopeMultiplier = 1f;
 
 	// How quickly the environment rotates to the given steepness.
-	public float rotationSpeed = 125.0f;
+	public float blendSpeed = 0.01f;
+
+	float blendX;
+	float blendY;
 
 	Rigidbody rb;
 	Vector3 targetRotation;
@@ -36,11 +39,36 @@ public class StageTiltBlendScript : MonoBehaviour {
 			slopeMultiplier = steepSlopeMultiplier;
 		}
 
-		float blendTreeX = Input.GetAxis ("Horizontal") * slopeMultiplier;
-		float blendTreeY = Input.GetAxis ("Vertical") * slopeMultiplier;
+		// Modify blend tree based on keys being held.
+		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
+			blendX -= slopeMultiplier*blendSpeed;
+		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
+			blendX += slopeMultiplier*blendSpeed;
+		} else if (Input.GetAxisRaw ("Horizontal") == 0) {
+			if (blendX > 0.0f) {
+				blendX -= Mathf.Abs(blendX)*blendSpeed;
+			} else if (blendX < 0.0f) {
+				blendX += Mathf.Abs(blendX)*blendSpeed;
+			}
+		}
 
-		animator.SetFloat ("axisX", blendTreeX);
-		animator.SetFloat ("axisY", blendTreeY);
+		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
+			blendY -= slopeMultiplier*blendSpeed;
+		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
+			blendY += slopeMultiplier*blendSpeed;
+		} else if (Input.GetAxisRaw ("Vertical") == 0) {
+			if (blendY > 0.0f) {
+				blendY -= Mathf.Abs(blendY)*blendSpeed;
+			} else if (blendY < 0.0f) {
+				blendY += Mathf.Abs(blendY)*blendSpeed;
+			}
+		}
+
+		blendX = Mathf.Clamp (blendX, -slopeMultiplier, slopeMultiplier);
+		blendY = Mathf.Clamp (blendY, -slopeMultiplier, slopeMultiplier);
+
+		animator.SetFloat ("axisX", blendX);
+		animator.SetFloat ("axisY", blendY);
 	}
 
 

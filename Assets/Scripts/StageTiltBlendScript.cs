@@ -11,8 +11,16 @@ public class StageTiltBlendScript : MonoBehaviour {
 	// How quickly the environment rotates to the given steepness.
 	public float blendSpeed = 0.01f;
 
-	float blendX;
-	float blendY;
+	// How quickly the blend vector 'steers' towards a new target direction.
+	public float blendSteerForce = 0.01f;
+
+	// How close blendLocation needs to be to blendTarget before it starts to slow down.
+	public float blendArriveDistance = 0.25f;
+
+	Vector2 blendLocation;
+	Vector2 blendVelocity;
+	Vector2 blendAcceleration;
+	Vector2 blendTarget;
 
 	Rigidbody rb;
 	Vector3 targetRotation;
@@ -39,48 +47,52 @@ public class StageTiltBlendScript : MonoBehaviour {
 			slopeMultiplier = steepSlopeMultiplier;
 		}
 
-		// Modify blend tree based on keys being held.
-		float targetBlendX = 0.0f;
-		float targetBlendY = 0.0f;
+		// Get a new blend target based on the directional keys being pressed.
+		blendTarget *= 0;
 
 		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
-			targetBlendX = -slopeMultiplier;
+			blendTarget.x = -slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
-			targetBlendX = slopeMultiplier;
-		} else if (Input.GetAxisRaw ("Horizontal") == 0) {
-			targetBlendX = 0.0f;
-		}
+			blendTarget.x = slopeMultiplier;
+		} 
 
 		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
-			targetBlendY = -slopeMultiplier;
+			blendTarget.y = -slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
-			targetBlendY = slopeMultiplier;
-		} else if (Input.GetAxisRaw ("Vertical") == 0) {
-			targetBlendY = 0.0f;
-		}
-			
-		Debug.Log ("Target Blend X: " + targetBlendX + ", Target Blend Y: " + targetBlendY);
-		Debug.Log ("Blend X: " + blendX + ", Blend Y: " + blendY);
-
-		// Tween towards target blend.
-		if (targetBlendX > blendX) {
-			blendX += SimpleTween (blendX, targetBlendX, blendSpeed);
-		} else if (targetBlendX < blendX) {
-			blendX -= SimpleTween (blendX, targetBlendX, blendSpeed);
+			blendTarget.y = slopeMultiplier;
 		}
 
-		if (targetBlendY > blendY) {
-			blendY += SimpleTween (blendY, targetBlendY, blendSpeed);
-		} else if (targetBlendY < blendY) {
-			blendY -= SimpleTween (blendY, targetBlendY, blendSpeed);
+		// Get the direction to the blend target
+		Vector2 desiredDirection = blendTarget - blendLocation;
+		float distanceToDesiredDirection = desiredDirection.magnitude;
+		desiredDirection.Normalize ();
+
+		// If we're within a certain range of blendTarget, begin to slow down.
+		if (distanceToDesiredDirection < blendArriveDistance) {
+			float magnitude = Mathf.Lerp (0f, blendArriveDistance, Mathf.InverseLerp (0f, blendSpeed, distanceToDesiredDirection));
+			desiredDirection *= magnitude;
+		} else {
+			desiredDirection *= blendSpeed;
 		}
+
+		// Steer towards blendTarget
+		Vector2 blendSteer = desiredDirection - blendVelocity;
+		blendSteer = Vector2.ClampMagnitude (blendSteer, blendSteerForce);
+
+		// Update blendLocation
+		blendVelocity += blendSteer;
+		blendVelocity = Vector2.ClampMagnitude (blendVelocity, blendSpeed*Time.deltaTime);
+		blendLocation += blendVelocity;
+
+		Debug.Log (blendLocation);
 
 		// Update the animator with the new blend values.
-		animator.SetFloat ("axisX", blendX);
-		animator.SetFloat ("axisY", blendY);
+		animator.SetFloat ("axisX", blendLocation.x);
+		animator.SetFloat ("axisY", blendLocation.y);
 	}
 
 
+	// Currently unused
 	float SimpleTween(float val1, float val2, float speed) {
 		float distance = Mathf.Abs (val1 - val2);
 		float newVal = distance * speed;

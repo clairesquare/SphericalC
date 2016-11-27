@@ -40,35 +40,51 @@ public class StageTiltBlendScript : MonoBehaviour {
 		}
 
 		// Modify blend tree based on keys being held.
+		float targetBlendX = 0.0f;
+		float targetBlendY = 0.0f;
+
 		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
-			blendX -= slopeMultiplier*blendSpeed;
+			targetBlendX = -slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
-			blendX += slopeMultiplier*blendSpeed;
+			targetBlendX = slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Horizontal") == 0) {
-			if (blendX > 0.0f) {
-				blendX -= Mathf.Abs(blendX)*blendSpeed;
-			} else if (blendX < 0.0f) {
-				blendX += Mathf.Abs(blendX)*blendSpeed;
-			}
+			targetBlendX = 0.0f;
 		}
 
 		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
-			blendY -= slopeMultiplier*blendSpeed;
+			targetBlendY = -slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
-			blendY += slopeMultiplier*blendSpeed;
+			targetBlendY = slopeMultiplier;
 		} else if (Input.GetAxisRaw ("Vertical") == 0) {
-			if (blendY > 0.0f) {
-				blendY -= Mathf.Abs(blendY)*blendSpeed;
-			} else if (blendY < 0.0f) {
-				blendY += Mathf.Abs(blendY)*blendSpeed;
-			}
+			targetBlendY = 0.0f;
+		}
+			
+		Debug.Log ("Target Blend X: " + targetBlendX + ", Target Blend Y: " + targetBlendY);
+		Debug.Log ("Blend X: " + blendX + ", Blend Y: " + blendY);
+
+		// Tween towards target blend.
+		if (targetBlendX > blendX) {
+			blendX += SimpleTween (blendX, targetBlendX, blendSpeed);
+		} else if (targetBlendX < blendX) {
+			blendX -= SimpleTween (blendX, targetBlendX, blendSpeed);
 		}
 
-		blendX = Mathf.Clamp (blendX, -slopeMultiplier, slopeMultiplier);
-		blendY = Mathf.Clamp (blendY, -slopeMultiplier, slopeMultiplier);
+		if (targetBlendY > blendY) {
+			blendY += SimpleTween (blendY, targetBlendY, blendSpeed);
+		} else if (targetBlendY < blendY) {
+			blendY -= SimpleTween (blendY, targetBlendY, blendSpeed);
+		}
 
+		// Update the animator with the new blend values.
 		animator.SetFloat ("axisX", blendX);
 		animator.SetFloat ("axisY", blendY);
+	}
+
+
+	float SimpleTween(float val1, float val2, float speed) {
+		float distance = Mathf.Abs (val1 - val2);
+		float newVal = distance * speed;
+		return newVal;
 	}
 
 

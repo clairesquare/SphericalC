@@ -12,6 +12,7 @@ public class BallSpawnerScript : MonoBehaviour {
 
 	void SpawnNewBall()
 	{
-		Instantiate (ballPrefab, transform.position, Quaternion.identity);
+		GameObject newBall = (GameObject) Instantiate (ballPrefab, transform.position, Quaternion.identity);
+		newBall.transform.localScale = transform.localScale;
 	}
 }

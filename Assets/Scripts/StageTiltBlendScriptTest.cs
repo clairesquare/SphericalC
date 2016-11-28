@@ -14,6 +14,9 @@ public class StageTiltBlendScriptTest : MonoBehaviour {
 	// How close blendLocation needs to be to blendTarget before it starts to slow down.
 	public float blendArriveDistance = 0.25f;
 
+	// How hard to 'push' the ball in the direction of the slope.
+	public float ballPushForce = 0.01f;
+
 	Vector2 blendLocation;
 	Vector2 blendVelocity;
 	Vector2 blendAcceleration;
@@ -75,7 +78,7 @@ public class StageTiltBlendScriptTest : MonoBehaviour {
 
 		// Steer towards blendTarget
 		Vector2 blendSteer = desiredDirection - blendVelocity;
-		blendSteer = Vector2.ClampMagnitude (blendSteer, blendSteerForce);
+//		blendSteer = Vector2.ClampMagnitude (blendSteer, blendSteerForce);
 
 		// Update blendLocation
 		blendVelocity += blendSteer;
@@ -85,6 +88,18 @@ public class StageTiltBlendScriptTest : MonoBehaviour {
 		// Update the animator with the new blend values.
 		animator.SetFloat ("axisX", blendLocation.x);
 		animator.SetFloat ("axisY", blendLocation.y);
+
+		// Push the ball
+		Vector3 forceDirection = GameObject.Find("Stage").transform.rotation.eulerAngles;
+		forceDirection.x *= -1f;
+		forceDirection.z *= -1f;
+		forceDirection = Vector3.ClampMagnitude (forceDirection, ballPushForce);
+
+		GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+		foreach (GameObject ball in balls) {
+			Debug.DrawLine ();
+			ball.GetComponent<Rigidbody> ().AddForce (forceDirection);
+		}
 	}
 
 

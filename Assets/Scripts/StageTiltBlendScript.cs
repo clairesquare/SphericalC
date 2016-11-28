@@ -9,7 +9,7 @@ public class StageTiltBlendScript : MonoBehaviour {
 	public float steepSlopeMultiplier = 1f;
 
 	// How quickly the environment rotates to the given steepness.
-	public float blendSpeed = 0.01f;
+	public float blendSpeed = 1f;
 
 	// How quickly the blend vector 'steers' towards a new target direction.
 	public float blendSteerForce = 0.01f;
@@ -83,8 +83,6 @@ public class StageTiltBlendScript : MonoBehaviour {
 		blendVelocity += blendSteer;
 		blendVelocity = Vector2.ClampMagnitude (blendVelocity, blendSpeed*Time.deltaTime);
 		blendLocation += blendVelocity;
-
-		Debug.Log (blendLocation);
 
 		// Update the animator with the new blend values.
 		animator.SetFloat ("axisX", blendLocation.x);

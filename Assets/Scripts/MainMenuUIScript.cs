@@ -11,12 +11,12 @@ public class MainMenuUIScript : MonoBehaviour {
 
 	public void LoadTrial1 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Stage1Scene");
+		SceneManager.LoadScene("Beta Stage 1");
 	}
 
 	public void LoadTrial2 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Stage2Scene");
+		SceneManager.LoadScene("Beta Stage 2");
 	}
 
 	public void LoadTrial3 () {

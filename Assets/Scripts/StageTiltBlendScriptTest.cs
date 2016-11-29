@@ -90,16 +90,18 @@ public class StageTiltBlendScriptTest : MonoBehaviour {
 		animator.SetFloat ("axisY", blendLocation.y);
 
 		// Push the ball
-		Vector3 forceDirection = GameObject.Find("Stage").transform.rotation.eulerAngles;
-		forceDirection.x *= -1f;
-		forceDirection.z *= -1f;
-		forceDirection = Vector3.ClampMagnitude (forceDirection, ballPushForce);
-
-		GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
-		foreach (GameObject ball in balls) {
-			Debug.DrawLine ();
-			ball.GetComponent<Rigidbody> ().AddForce (forceDirection);
-		}
+//		Vector3 forceDirection = new Vector3(desiredDirection.x, 0f, desiredDirection.y);
+//		forceDirection = GameObject.Find("Stage").transform.TransformPoint(forceDirection);
+//		forceDirection.Normalize();
+//		forceDirection.x *= -1f;
+//		forceDirection.z *= -1f;
+//		forceDirection *= ballPushForce; Debug.Log(forceDirection);
+//
+//		GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+//		foreach (GameObject ball in balls) {
+//			Debug.DrawLine (ball.transform.position, forceDirection * 4f);
+//			ball.GetComponent<Rigidbody> ().AddForce (forceDirection);
+//		}
 	}
 
 

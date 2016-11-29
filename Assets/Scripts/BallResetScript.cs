@@ -10,8 +10,9 @@ public class BallResetScript : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider collider) {
-		if (collider.tag == "Ball") {
+		if (collider.tag == "Ball" && collider.GetComponent<BallScript>().inPlay) {
 			collider.GetComponent<BallScript> ().SendMessage ("RemoveFromPlay");
+			collider.GetComponent<BallScript> ().inPlay = false;
 			ballSpawnerScript.SendMessage ("SpawnNewBall");
 		}
 	}

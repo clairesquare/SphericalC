@@ -10,12 +10,14 @@ public class BallScript : MonoBehaviour {
 
 	Transform spotlightTransform;
 
+	public bool inPlay = true;
 
 	void Start() {
 		// SPAWN A NEW SPOTLIGHT //
 		GameObject newSpotlight = (GameObject) Instantiate(spotlightPrefab, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Quaternion.identity);
 		newSpotlight.GetComponent<BallSpotlightScript> ().ballTransform = transform;
 		spotlightTransform = newSpotlight.transform;
+		transform.parent = GameObject.Find ("Stage").transform;
 	}
 
 

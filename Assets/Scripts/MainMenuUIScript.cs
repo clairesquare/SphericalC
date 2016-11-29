@@ -21,7 +21,7 @@ public class MainMenuUIScript : MonoBehaviour {
 
 	public void LoadTrial3 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Stage3Scene");
+		SceneManager.LoadScene("Beta Stage 3");
 	}
 
 	public void LoadTrial4 () {

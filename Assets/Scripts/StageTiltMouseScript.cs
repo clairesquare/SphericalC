@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StageTiltBlendScript : MonoBehaviour {
+public class StageTiltMouseScript : MonoBehaviour {
 
-	// How steep the angle of the tilt is depending on which key is currently held.
-	public float gentleSlopeMultiplier = 0.1f;
-	public float middleSlopeMultiplier = 0.5f;
-	public float steepSlopeMultiplier = 1f;
+	// How far the game will measure cursor movement.
+	public float mouseRange = 25f;
 
 	// How quickly the environment rotates to the given steepness.
 	public float blendSpeed = 1f;
@@ -21,6 +19,8 @@ public class StageTiltBlendScript : MonoBehaviour {
 	Vector2 blendVelocity;
 	Vector2 blendAcceleration;
 	Vector2 blendTarget;
+
+	Vector2 mouseMovement;
 
 	Rigidbody rb;
 	Vector3 targetRotation;
@@ -38,29 +38,27 @@ public class StageTiltBlendScript : MonoBehaviour {
 	{
 		// HANDLE INPUT //
 
-		// Get the slope multiplier based on the key being held.
-		float slopeMultiplier = gentleSlopeMultiplier;
-
-		if (Input.GetButton ("Left Shift")) {
-			slopeMultiplier = middleSlopeMultiplier;
-		} else if (Input.GetButton ("Space")) {
-			slopeMultiplier = steepSlopeMultiplier;
+		if (Input.GetButtonDown ("Mouse Tilt") || Input.GetButtonUp("Mouse Tilt")) {
+			mouseMovement *= 0f;
 		}
 
-		// Get a new blend target based on the directional keys being pressed.
+		if (Input.GetButton ("Mouse Tilt")) {
+			mouseMovement.x += Input.GetAxis ("Mouse X");
+			mouseMovement.y += Input.GetAxis ("Mouse Y");
+		}
+
+		mouseMovement.x = Mathf.Clamp (mouseMovement.x, -mouseRange, mouseRange);
+		mouseMovement.y = Mathf.Clamp (mouseMovement.y, -mouseRange, mouseRange);
+
+		// Translate mouse coordinates to blend coordinates.
 		blendTarget *= 0;
 
-		if (Input.GetAxisRaw ("Horizontal") < 0.0f) {
-			blendTarget.x = -slopeMultiplier;
-		} else if (Input.GetAxisRaw ("Horizontal") > 0.0f) {
-			blendTarget.x = slopeMultiplier;
-		} 
+		blendTarget.x = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.x));
+		blendTarget.y = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.y));
 
-		if (Input.GetAxisRaw ("Vertical") < 0.0f) {
-			blendTarget.y = -slopeMultiplier;
-		} else if (Input.GetAxisRaw ("Vertical") > 0.0f) {
-			blendTarget.y = slopeMultiplier;
-		}
+		Debug.Log (mouseMovement);
+
+		// HANDLE BLENDING //
 
 		// Get the direction to the blend target
 		Vector2 desiredDirection = blendTarget - blendLocation;

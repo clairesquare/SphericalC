@@ -56,8 +56,6 @@ public class StageTiltMouseScript : MonoBehaviour {
 		blendTarget.x = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.x));
 		blendTarget.y = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.y));
 
-		Debug.Log (mouseMovement);
-
 		// HANDLE BLENDING //
 
 		// Get the direction to the blend target

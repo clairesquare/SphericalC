@@ -11,6 +11,7 @@ public class BallResetScript : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Ball" && collider.GetComponent<BallScript>().inPlay) {
+			collider.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f))*2f);
 			collider.GetComponent<BallScript> ().SendMessage ("RemoveFromPlay");
 			collider.GetComponent<BallScript> ().inPlay = false;
 			ballSpawnerScript.SendMessage ("SpawnNewBall");

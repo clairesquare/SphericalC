@@ -15,6 +15,9 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	float lightShaftOffsetCurrent;
 	float lightBottomEmissionCurrent;
 
+	bool winPulseActive = false;
+	public float winPulseSpeed = 0.1f;
+
 	public float pulseFrequency = 1f;
 	public float emissionRange = 0.1f;
 	public float minOffset = -0.12f;
@@ -33,25 +36,32 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	}
 
 	void Update () {
-		// Get the new sine value
-		float sineValue = Mathf.Sin (sineTime);
+		if (winPulseActive) {
+			lightShaftEmissionCurrent = Mathf.Lerp (lightShaftEmissionCurrent, 1f, winPulseSpeed);
+			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
 
-		// Get the new values for each variable
-//		lightShaftEmissionCurrent = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (lightShaftEmissionStart-emissionRange, lightShaftEmissionStart, lightShaftEmissionCurrent));
-//		lightShaftOffsetCurrent = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (minOffset, lightShaftOffsetStart, lightShaftOffsetCurrent));
-//		lightBottomEmissionCurrent = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (lightBottomEmissionStart-emissionRange, lightBottomEmissionStart, lightBottomEmissionCurrent));
+		} else {
+			
+			// Get the new sine value
+			float sineValue = Mathf.Sin (sineTime);
 
-		lightShaftEmissionCurrent = MyMath.Map(sineValue, -1f, 1f, lightShaftEmissionStart-emissionRange, lightShaftEmissionStart);
-		lightShaftOffsetCurrent = MyMath.Map(sineValue, 1f, -1f, minOffset, lightShaftOffsetStart);
-		lightBottomEmissionCurrent = MyMath.Map(sineValue, -1f, 1f, lightBottomEmissionStart-emissionRange*3, lightBottomEmissionStart);
+			lightShaftEmissionCurrent = MyMath.Map (sineValue, -1f, 1f, lightShaftEmissionStart - emissionRange, lightShaftEmissionStart);
+			lightShaftOffsetCurrent = MyMath.Map (sineValue, 1f, -1f, minOffset, lightShaftOffsetStart);
+			lightBottomEmissionCurrent = MyMath.Map (sineValue, -1f, 1f, lightBottomEmissionStart - emissionRange * 3, lightBottomEmissionStart);
+
+			// Update the sine time
+			sineTime += pulseFrequency * Time.deltaTime;
+		}
 
 		// Apply new values
-		lightShaftMaterial.SetColor("_EmissionColor", new Color(lightShaftEmissionCurrent, lightShaftEmissionCurrent, lightShaftEmissionCurrent));
-		lightShaftMaterial.mainTextureOffset = new Vector2(lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetCurrent);
+		lightShaftMaterial.SetColor ("_EmissionColor", new Color (lightShaftEmissionCurrent, lightShaftEmissionCurrent, lightShaftEmissionCurrent));
+		lightShaftMaterial.mainTextureOffset = new Vector2 (lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetCurrent);
 		lightBottomMaterial.SetColor ("_Color", new Color (lightBottomEmissionCurrent, lightBottomEmissionCurrent, lightBottomEmissionCurrent));
+	}
 
-		// Update the sine time
-		sineTime += pulseFrequency*Time.deltaTime;
+	void WinPulseActivate() {
+		Debug.Log ("Activated.");
+		winPulseActive = true;
 	}
 
 	void OnDisable() {

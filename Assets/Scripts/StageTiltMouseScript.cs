@@ -64,8 +64,6 @@ public class StageTiltMouseScript : MonoBehaviour {
 		dir = Quaternion.Euler (new Vector3 (0f, 0f, blendRotation))*dir;
 		blendTarget = dir + (Vector3) blendTarget;
 
-		Debug.Log (blendTarget);
-
 		// HANDLE BLENDING //
 
 		// Get the direction to the blend target

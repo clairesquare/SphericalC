@@ -45,8 +45,6 @@ public class GoalLightPulsateScript : MonoBehaviour {
 		lightShaftOffsetCurrent = MyMath.Map(sineValue, 1f, -1f, minOffset, lightShaftOffsetStart);
 		lightBottomEmissionCurrent = MyMath.Map(sineValue, -1f, 1f, lightBottomEmissionStart-emissionRange*3, lightBottomEmissionStart);
 
-		Debug.Log (lightShaftEmissionCurrent);
-
 		// Apply new values
 		lightShaftMaterial.SetColor("_EmissionColor", new Color(lightShaftEmissionCurrent, lightShaftEmissionCurrent, lightShaftEmissionCurrent));
 		lightShaftMaterial.mainTextureOffset = new Vector2(lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetCurrent);

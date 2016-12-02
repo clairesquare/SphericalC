@@ -15,6 +15,9 @@ public class StageTiltMouseScript : MonoBehaviour {
 	// How close blendLocation needs to be to blendTarget before it starts to slow down.
 	public float blendArriveDistance = 0.25f;
 
+	// How much to rotate the blend target.
+	public float blendRotation = 0f;
+
 	Vector2 blendLocation;
 	Vector2 blendVelocity;
 	Vector2 blendAcceleration;
@@ -50,11 +53,18 @@ public class StageTiltMouseScript : MonoBehaviour {
 		mouseMovement.x = Mathf.Clamp (mouseMovement.x, -mouseRange, mouseRange);
 		mouseMovement.y = Mathf.Clamp (mouseMovement.y, -mouseRange, mouseRange);
 
-		// Translate mouse coordinates to blend coordinates.
+		// Translate mouse coordinates to blend coordinates
 		blendTarget *= 0;
 
 		blendTarget.x = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.x));
 		blendTarget.y = Mathf.Lerp (-1f, 1f, Mathf.InverseLerp (-mouseRange, mouseRange, mouseMovement.y));
+
+		// Rotate blend target to match camera angle
+		Vector3 dir = blendTarget - new Vector2 (0f,0f);
+		dir = Quaternion.Euler (new Vector3 (0f, 0f, blendRotation))*dir;
+		blendTarget = dir + (Vector3) blendTarget;
+
+		Debug.Log (blendTarget);
 
 		// HANDLE BLENDING //
 

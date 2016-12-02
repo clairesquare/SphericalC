@@ -36,9 +36,17 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	}
 
 	void Update () {
+		
 		if (winPulseActive) {
+
+			// Increase the emission of the light materials drastically. This happens when the ball
+			// reaches the goal.
 			lightShaftEmissionCurrent = Mathf.Lerp (lightShaftEmissionCurrent, 1f, winPulseSpeed);
 			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
+
+			if (lightBottomEmissionCurrent > 0.95f) {
+				Invoke ("Erupt", 0.8f);
+			}
 
 		} else {
 			
@@ -60,8 +68,13 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	}
 
 	void WinPulseActivate() {
-		Debug.Log ("Activated.");
 		winPulseActive = true;
+	}
+
+	void Erupt() {
+		Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
+		lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
+		lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);
 	}
 
 	void OnDisable() {

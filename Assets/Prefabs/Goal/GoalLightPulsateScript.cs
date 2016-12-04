@@ -15,14 +15,16 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	float lightShaftOffsetCurrent;
 	float lightBottomEmissionCurrent;
 
-	bool winPulseActive = false;
 	public float winPulseSpeed = 0.1f;
-
+	int pulseStage = 0;
 	public float pulseFrequency = 1f;
 	public float emissionRange = 0.1f;
 	public float minOffset = -0.12f;
-
 	float sineTime;
+
+	bool lightColorSaved = false;
+	Color savedLightColor;
+	float savedLightIntensity;
 
 	void Start() {
 		// Load the relevent assets
@@ -36,20 +38,9 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	}
 
 	void Update () {
-		
-		if (winPulseActive) {
 
-			// Increase the emission of the light materials drastically. This happens when the ball
-			// reaches the goal.
-			lightShaftEmissionCurrent = Mathf.Lerp (lightShaftEmissionCurrent, 1f, winPulseSpeed);
-			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
-
-			if (lightBottomEmissionCurrent > 0.95f) {
-				Invoke ("Erupt", 0.8f);
-			}
-
-		} else {
-			
+		// Pulsing normally
+		if (pulseStage == 0) {
 			// Get the new sine value
 			float sineValue = Mathf.Sin (sineTime);
 
@@ -61,26 +52,64 @@ public class GoalLightPulsateScript : MonoBehaviour {
 			sineTime += pulseFrequency * Time.deltaTime;
 		}
 
+		// Increasing light
+		else if (pulseStage == 1) {
+
+			// Increase the emission of the light materials drastically. This happens when the ball
+			// reaches the goal.
+			lightShaftEmissionCurrent = Mathf.Lerp (lightShaftEmissionCurrent, 1f, winPulseSpeed);
+			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
+
+			if (lightBottomEmissionCurrent > 0.9999f) {
+				Camera.main.BroadcastMessage ("IncreaseShake", 2f);
+				SendMessage ("IncreasePulseStage");
+				Invoke ("IncreasePulseStage", 2.3f);
+			}
+
+		}
+
+		// Erupting light shaft
+		else if (pulseStage == 2) {
+
+			if (!lightColorSaved) {
+				savedLightColor = GameObject.Find ("Directional Light").GetComponent<Light> ().color;
+				savedLightIntensity = GameObject.Find ("Directional Light").GetComponent<Light> ().intensity;
+				GameObject.Find ("Directional Light").GetComponent<Light> ().color = new Color (1f, 1f, 1f);
+				GameObject.Find ("Directional Light").GetComponent<Light> ().intensity = 1.5f;
+				lightColorSaved = true;
+			}
+			Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
+			lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
+			lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);
+		}
+
+		// Delete light shaft
+		else if (pulseStage == 3) {
+			Destroy(GameObject.Find ("Light Shaft"));
+		}
+
 		// Apply new values
 		lightShaftMaterial.SetColor ("_EmissionColor", new Color (lightShaftEmissionCurrent, lightShaftEmissionCurrent, lightShaftEmissionCurrent));
 		lightShaftMaterial.mainTextureOffset = new Vector2 (lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetCurrent);
 		lightBottomMaterial.SetColor ("_Color", new Color (lightBottomEmissionCurrent, lightBottomEmissionCurrent, lightBottomEmissionCurrent));
 	}
 
-	void WinPulseActivate() {
-		winPulseActive = true;
+
+	void IncreasePulseStage() {
+		pulseStage += 1;
 	}
 
-	void Erupt() {
-		Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
-		lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
-		lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);
+
+	void FlashCamera() {
+		
 	}
+
 
 	void OnDisable() {
 		// Reset to original values
 		lightShaftMaterial.SetColor("_EmissionColor", new Color(lightShaftEmissionStart, lightShaftEmissionStart, lightShaftEmissionStart));
 		lightShaftMaterial.mainTextureOffset = new Vector2(lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetStart);
 		lightBottomMaterial.SetColor ("_Color", new Color (lightBottomEmissionStart, lightBottomEmissionStart, lightBottomEmissionStart));
+
 	}
 }

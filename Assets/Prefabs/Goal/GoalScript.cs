@@ -10,6 +10,7 @@ public class GoalScript : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Ball") {
+			Camera.main.BroadcastMessage ("IncreaseShake", 0.1f);
 			GetComponentInParent<GoalLightPulsateScript> ().SendMessage ("IncreasePulseStage");
 			Invoke ("WinLevel", winDelay);
 			collider.GetComponent<BallScript> ().SendMessage ("RemoveFromPlay");

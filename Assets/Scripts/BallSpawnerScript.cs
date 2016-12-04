@@ -16,5 +16,6 @@ public class BallSpawnerScript : MonoBehaviour {
 		GameObject newBall = (GameObject) Instantiate (ballPrefab, transform.position, Quaternion.identity);
 		newBall.transform.localScale = transform.localScale;
 		newBall.GetComponent<MeshRenderer> ().material.color = ballColor;
+		newBall.GetComponent<MeshRenderer> ().material.SetColor ("_EmissionColor", ballColor);
 	}
 }

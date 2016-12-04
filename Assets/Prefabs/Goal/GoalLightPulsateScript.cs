@@ -17,12 +17,14 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 	public float winPulseSpeed = 0.1f;
 	int pulseStage = 0;
-
 	public float pulseFrequency = 1f;
 	public float emissionRange = 0.1f;
 	public float minOffset = -0.12f;
-
 	float sineTime;
+
+	bool lightColorSaved = false;
+	Color savedLightColor;
+	float savedLightIntensity;
 
 	void Start() {
 		// Load the relevent assets
@@ -67,8 +69,14 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 		// Erupting light shaft
 		else if (pulseStage == 2) {
-			GameObject.Find ("Directional Light").GetComponent<Light> ().color = new Color (1f, 1f, 1f);
-			GameObject.Find ("Directional Light").GetComponent<Light> ().intensity = 1.5f;
+
+			if (!lightColorSaved) {
+				savedLightColor = GameObject.Find ("Directional Light").GetComponent<Light> ().color;
+				savedLightIntensity = GameObject.Find ("Directional Light").GetComponent<Light> ().intensity;
+				GameObject.Find ("Directional Light").GetComponent<Light> ().color = new Color (1f, 1f, 1f);
+				GameObject.Find ("Directional Light").GetComponent<Light> ().intensity = 1.5f;
+				lightColorSaved = true;
+			}
 			Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
 			lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
 			lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);
@@ -101,5 +109,6 @@ public class GoalLightPulsateScript : MonoBehaviour {
 		lightShaftMaterial.SetColor("_EmissionColor", new Color(lightShaftEmissionStart, lightShaftEmissionStart, lightShaftEmissionStart));
 		lightShaftMaterial.mainTextureOffset = new Vector2(lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetStart);
 		lightBottomMaterial.SetColor ("_Color", new Color (lightBottomEmissionStart, lightBottomEmissionStart, lightBottomEmissionStart));
+
 	}
 }

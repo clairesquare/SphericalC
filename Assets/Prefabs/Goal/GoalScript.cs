@@ -13,7 +13,7 @@ public class GoalScript : MonoBehaviour {
 	public AudioSource winAudio;
 
 	void OnTriggerEnter(Collider collider) {
-		if (collider.tag == "Ball") {
+		if (collider.tag == "Ball" && collider.GetComponent<BallScript>().inPlay) {
 			Camera.main.BroadcastMessage ("FlashScreen");
 			ballInAudio.Play ();
 			chargeAudio.Play ();

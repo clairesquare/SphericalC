@@ -26,6 +26,8 @@ public class GoalLightPulsateScript : MonoBehaviour {
 	Color savedLightColor;
 	float savedLightIntensity;
 
+	AudioSource audioSource;
+
 	void Start() {
 		// Load the relevent assets
 		lightShaftMaterial = (Material) AssetDatabase.LoadAssetAtPath("Assets/Materials/GradientMaterial.mat", typeof(Material));
@@ -35,6 +37,8 @@ public class GoalLightPulsateScript : MonoBehaviour {
 		lightShaftEmissionStart = lightShaftMaterial.GetColor ("_EmissionColor").r;
 		lightShaftOffsetStart = lightShaftMaterial.mainTextureOffset.y;
 		lightBottomEmissionStart = lightBottomMaterial.GetColor ("_Color").r;
+
+		audioSource = GetComponent<AudioSource> ();
 	}
 
 	void Update () {
@@ -76,8 +80,10 @@ public class GoalLightPulsateScript : MonoBehaviour {
 				savedLightIntensity = GameObject.Find ("Directional Light").GetComponent<Light> ().intensity;
 				GameObject.Find ("Directional Light").GetComponent<Light> ().color = new Color (1f, 1f, 1f);
 				GameObject.Find ("Directional Light").GetComponent<Light> ().intensity = 1.5f;
+				audioSource.Play();
 				lightColorSaved = true;
 			}
+
 			Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
 			lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
 			lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);
@@ -85,6 +91,7 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 		// Delete light shaft
 		else if (pulseStage == 3) {
+			audioSource.Stop ();
 			Destroy(GameObject.Find ("Light Shaft"));
 		}
 

@@ -30,6 +30,15 @@ public class BallScript : MonoBehaviour {
 		if (audioSource.enabled) {
 			audioSource.pitch = MyMath.Map(rigidbody.velocity.magnitude, 0f, 5f, 0.5f, 3f);
 		}
+
+		if (spotlightTransform != null) {
+			spotlightTransform.gameObject.GetComponent<Light> ().intensity = MyMath.Map (
+				rigidbody.velocity.magnitude, 0f, 3f, 0.3f, 1f
+			);
+			spotlightTransform.gameObject.GetComponent<Light> ().spotAngle = MyMath.Map (
+				rigidbody.velocity.magnitude, 0f, 3f, 3f, 1f
+			);
+		}
 	}
 
 

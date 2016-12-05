@@ -11,7 +11,8 @@ public class BallScript : MonoBehaviour {
 	public bool inPlay = true;
 
 	Transform spotlightTransform;
-	AudioSource audioSource;
+	public AudioSource rollingAudio;
+	public AudioSource bounceAudio;
 	Rigidbody rigidbody;
 
 	void Start() {
@@ -20,15 +21,14 @@ public class BallScript : MonoBehaviour {
 		newSpotlight.GetComponent<BallSpotlightScript> ().ballTransform = transform;
 		spotlightTransform = newSpotlight.transform;
 
-		audioSource = GetComponent<AudioSource> ();
 		rigidbody = GetComponent<Rigidbody> ();
 	}
 
 
 	void Update() {
 		// Set audio pitch based on current velocity
-		if (audioSource.enabled) {
-			audioSource.pitch = MyMath.Map(rigidbody.velocity.magnitude, 0f, 5f, 0.5f, 3f);
+		if (rollingAudio.enabled) {
+			rollingAudio.pitch = MyMath.Map(rigidbody.velocity.magnitude, 0f, 5f, 0.5f, 3f);
 		}
 
 		if (spotlightTransform != null) {
@@ -42,9 +42,17 @@ public class BallScript : MonoBehaviour {
 	}
 
 
+	void OnCollisionEnter(Collision collision) {
+		if (collision.relativeVelocity.magnitude > 5f) {
+			bounceAudio.pitch = Random.Range (0.5f, 1.5f);
+			bounceAudio.Play ();
+		}
+	}
+
+
 	void RemoveFromPlay() {
 		// When this ball goes out of play delete its spotlight (And maybe do other things later)
 		Destroy(spotlightTransform.gameObject);
-		audioSource.enabled = false;
+		rollingAudio.enabled = false;
 	}
 }

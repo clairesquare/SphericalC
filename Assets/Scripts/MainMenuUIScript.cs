@@ -11,7 +11,7 @@ public class MainMenuUIScript : MonoBehaviour {
 
 	public void LoadTrial1 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Beta Stage 1");
+		SceneManager.LoadScene("HandLevel 1");
 	}
 
 	public void LoadTrial2 () {

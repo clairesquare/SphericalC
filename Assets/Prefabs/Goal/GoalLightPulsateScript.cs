@@ -111,5 +111,7 @@ public class GoalLightPulsateScript : MonoBehaviour {
 		lightShaftMaterial.mainTextureOffset = new Vector2(lightShaftMaterial.mainTextureOffset.x, lightShaftOffsetStart);
 		lightBottomMaterial.SetColor ("_Color", new Color (lightBottomEmissionStart, lightBottomEmissionStart, lightBottomEmissionStart));
 
+//		GameObject.Find ("Directional Light").GetComponent<Light> ().color = savedLightColor;
+//		GameObject.Find ("Directional Light").GetComponent<Light> ().intensity = savedLightIntensity;
 	}
 }

@@ -1,15 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class DontDestroyScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	void Awake ()
+	{
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Music");
+		if (objs.Length > 1) {
+			Destroy (gameObject);
+		}
+
+		DontDestroyOnLoad(gameObject);
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void Update()
+	{
+//		if (SceneManager.GetActiveScene().name == "SceneName")
+//		{
+//			Destroy(gameObject);
+//		}
 	}
 }

@@ -17,6 +17,7 @@ public class BallResetScript : MonoBehaviour {
 		if (collider.tag == "Ball" && collider.GetComponent<BallScript>().inPlay) {
 
 			audioSource.Play ();
+			Camera.main.BroadcastMessage ("IncreaseShake", 0.3f);
 
 			collider.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f))*2f);
 			collider.GetComponent<BallScript> ().SendMessage ("RemoveFromPlay");

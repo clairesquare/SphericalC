@@ -14,9 +14,9 @@ public class GoalScript : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Ball") {
+			Camera.main.BroadcastMessage ("FlashScreen");
 			ballInAudio.Play ();
 			chargeAudio.Play ();
-			Camera.main.BroadcastMessage ("IncreaseShake", 0.1f);
 			GetComponentInParent<GoalLightPulsateScript> ().SendMessage ("IncreasePulseStage");
 			Invoke ("WinLevel", winDelay);
 			Invoke ("StopAudio", 1.4f);
@@ -32,6 +32,7 @@ public class GoalScript : MonoBehaviour {
 	}
 
 	void WinLevel() {
+		winAudio.pitch = Random.Range (0.5f, 2.0f);
 		winAudio.Play ();
 		winScreenGameObject.SetActive (true);
 	}

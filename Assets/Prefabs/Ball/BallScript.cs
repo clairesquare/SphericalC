@@ -22,6 +22,9 @@ public class BallScript : MonoBehaviour {
 		spotlightTransform = newSpotlight.transform;
 
 		rigidbody = GetComponent<Rigidbody> ();
+
+		// Flash screen
+		Camera.main.BroadcastMessage ("FlashScreen");
 	}
 
 

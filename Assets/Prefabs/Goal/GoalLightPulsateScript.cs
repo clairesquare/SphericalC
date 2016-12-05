@@ -84,6 +84,7 @@ public class GoalLightPulsateScript : MonoBehaviour {
 				lightColorSaved = true;
 			}
 
+			Camera.main.BroadcastMessage ("FlashScreen");
 			Transform lightShaftTransform = GameObject.Find ("Light Shaft").transform;
 			lightShaftTransform.localScale = new Vector3 (lightShaftTransform.localScale.x, 5f, lightShaftTransform.localScale.z);
 			lightShaftTransform.localPosition = new Vector3 (lightShaftTransform.localPosition.x, 1f, lightShaftTransform.localPosition.z);

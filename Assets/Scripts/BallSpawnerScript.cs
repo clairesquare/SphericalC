@@ -17,6 +17,7 @@ public class BallSpawnerScript : MonoBehaviour {
 	void SpawnNewBall()
 	{
 		audioSource.Play ();
+		Camera.main.BroadcastMessage ("FlashScreen");
 		GameObject newBall = (GameObject) Instantiate (ballPrefab, transform.position, Quaternion.identity);
 		newBall.transform.localScale = transform.localScale;
 		newBall.GetComponent<MeshRenderer> ().material.color = ballColor;

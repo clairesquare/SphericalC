@@ -8,17 +8,14 @@ public class GoalScript : MonoBehaviour {
 	// Delay between landing the ball in the hole and the win animation playing.
 	public float winDelay = 50f;
 
-	AudioSource[] audioSources;
-
-	void Start() {
-		audioSources = GetComponents<AudioSource> ();
-	}
+	public AudioSource ballInAudio;
+	public AudioSource chargeAudio;
+	public AudioSource winAudio;
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Ball") {
-			foreach (AudioSource audioSource in audioSources) {
-				audioSource.Play ();
-			}
+			ballInAudio.Play ();
+			chargeAudio.Play ();
 			Camera.main.BroadcastMessage ("IncreaseShake", 0.1f);
 			GetComponentInParent<GoalLightPulsateScript> ().SendMessage ("IncreasePulseStage");
 			Invoke ("WinLevel", winDelay);
@@ -29,12 +26,13 @@ public class GoalScript : MonoBehaviour {
 	}
 
 	void StopAudio() {
-		foreach (AudioSource audioSource in audioSources) {
+		foreach (AudioSource audioSource in GetComponents<AudioSource>()) {
 			audioSource.Stop ();
 		}
 	}
 
 	void WinLevel() {
+		winAudio.Play ();
 		winScreenGameObject.SetActive (true);
 	}
 }

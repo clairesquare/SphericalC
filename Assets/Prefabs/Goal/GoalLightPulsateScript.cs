@@ -65,9 +65,9 @@ public class GoalLightPulsateScript : MonoBehaviour {
 			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
 
 			if (lightBottomEmissionCurrent > 0.9999f) {
-				Camera.main.BroadcastMessage ("IncreaseShake", 2f);
+				Camera.main.BroadcastMessage ("IncreaseShake", 3.5f);
 				SendMessage ("IncreasePulseStage");
-				Invoke ("IncreasePulseStage", 2.3f);
+				Invoke ("IncreasePulseStage", 3.5f);
 			}
 
 		}

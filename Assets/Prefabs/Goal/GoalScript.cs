@@ -29,6 +29,8 @@ public class GoalScript : MonoBehaviour {
 	}
 
 	void WinLevel() {
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
 		winAudio.pitch = Random.Range (0.5f, 2.0f);
 		winAudio.Play ();
 		Debug.Log ("I tried to do this.");

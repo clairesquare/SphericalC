@@ -46,7 +46,7 @@ public class BallScript : MonoBehaviour {
 
 
 	void OnCollisionEnter(Collision collision) {
-		if (collision.relativeVelocity.magnitude > 5f) {
+		if (collision.relativeVelocity.magnitude > 2.3f) {
 			bounceAudio.pitch = Random.Range (0.5f, 1.5f);
 			bounceAudio.Play ();
 		}

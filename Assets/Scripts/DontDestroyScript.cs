@@ -17,9 +17,9 @@ public class DontDestroyScript : MonoBehaviour {
 
 	void Update()
 	{
-//		if (SceneManager.GetActiveScene().name == "SceneName")
-//		{
-//			Destroy(gameObject);
-//		}
+		if (SceneManager.GetActiveScene().name == "TitleScreenScene")
+		{
+			Destroy(gameObject);
+		}
 	}
 }

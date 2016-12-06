@@ -27,6 +27,8 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 	AudioSource audioSource;
 
+	Timer lightTimer;
+
 	void Start() {
 		// Load the relevent assets
 		lightShaftMaterial = (Material) Resources.Load("GradientMaterial") as Material;
@@ -38,6 +40,8 @@ public class GoalLightPulsateScript : MonoBehaviour {
 		lightBottomEmissionStart = lightBottomMaterial.GetColor ("_Color").r;
 
 		audioSource = GetComponent<AudioSource> ();
+
+		lightTimer = new Timer (0.0f);
 	}
 
 	void Update () {
@@ -63,7 +67,9 @@ public class GoalLightPulsateScript : MonoBehaviour {
 			lightShaftEmissionCurrent = Mathf.Lerp (lightShaftEmissionCurrent, 1f, winPulseSpeed);
 			lightBottomEmissionCurrent = Mathf.Lerp (lightBottomEmissionCurrent, 1f, winPulseSpeed);
 
-			if (lightBottomEmissionCurrent > 0.9999f) {
+			lightTimer.Update ();
+
+			if (lightTimer.finished) {
 				Camera.main.BroadcastMessage ("IncreaseShake", 3.5f);
 				SendMessage ("IncreasePulseStage");
 				Invoke ("IncreasePulseStage", 3.5f);
@@ -104,11 +110,51 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 	void IncreasePulseStage() {
 		pulseStage += 1;
+		if (pulseStage == 1) {
+			lightTimer.Set (1.5f);
+		}
 	}
 
 
-	void FlashCamera() {
-		
+	class Timer {
+		float maxTime;
+		float currentTime;
+		public bool finished = false;
+		public bool paused = false;
+
+		public Timer (float _maxTime) {
+			maxTime = _maxTime;
+			currentTime = maxTime;
+			paused = true;
+		}
+
+		public void Update() {
+
+			if (paused) {
+				return;	
+			}
+
+			if (currentTime > 0.0f) {
+				currentTime -= Time.deltaTime;
+			} else {
+				finished = true;
+				paused = true;
+			}
+		}
+
+		public void Set(float _maxTime) {
+			maxTime = _maxTime;
+			currentTime = maxTime;
+			finished = false;
+			paused = false;
+		}
+			
+		public void Reset() {
+			paused = true;
+			finished = false;
+			maxTime = 0.0f;
+			currentTime = maxTime;
+		}
 	}
 
 

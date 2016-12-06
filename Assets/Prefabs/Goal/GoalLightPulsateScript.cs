@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 
 public class GoalLightPulsateScript : MonoBehaviour {
@@ -30,8 +29,8 @@ public class GoalLightPulsateScript : MonoBehaviour {
 
 	void Start() {
 		// Load the relevent assets
-		lightShaftMaterial = (Material) AssetDatabase.LoadAssetAtPath("Assets/Materials/GradientMaterial.mat", typeof(Material));
-		lightBottomMaterial = (Material) AssetDatabase.LoadAssetAtPath("Assets/Materials/LightBottomMaterial.mat", typeof(Material));
+		lightShaftMaterial = (Material) Resources.Load("GradientMaterial") as Material;
+		lightBottomMaterial = (Material) Resources.Load("LightBottomMaterial") as Material;
 
 		// Get the starting values for each variable
 		lightShaftEmissionStart = lightShaftMaterial.GetColor ("_EmissionColor").r;

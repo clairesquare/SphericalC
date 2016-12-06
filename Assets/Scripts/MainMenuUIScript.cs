@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +9,7 @@ public class MainMenuUIScript : MonoBehaviour {
 
 	void Start() {
 		audioSource = gameObject.AddComponent<AudioSource>();
-		audioSource.clip = (AudioClip) AssetDatabase.LoadAssetAtPath("Assets/Audio/menu/Notification.wav", typeof(AudioClip));
+		audioSource.clip = (AudioClip) Resources.Load ("Notification") as AudioClip;
 		audioSource.volume = 0.7f;
 		audioSource.pitch = 1.9f;
 	}

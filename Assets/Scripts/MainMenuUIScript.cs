@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 
 
 public class MainMenuUIScript : MonoBehaviour {
-	
+
+	public GameObject stageSelection;
+
 	public void StageSelection () {
-		SceneManager.LoadScene("StageSelectionScene");
+		stageSelection.SetActive (true);
 	}
 
 	public void LoadTrial1 () {
@@ -75,7 +77,7 @@ public class MainMenuUIScript : MonoBehaviour {
     }
 
 	public void LoadMainMenu () {
-		SceneManager.LoadScene("TitleScreenScene");
+		SceneManager.LoadScene("Title Scene");
 	}
 
 	public void ExitGame () {

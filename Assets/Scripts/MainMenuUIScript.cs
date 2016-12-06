@@ -16,10 +16,12 @@ public class MainMenuUIScript : MonoBehaviour {
 	}
 
 	public GameObject stageSelection;
+	public GameObject titleScreen;
 
 	public void StageSelection () {
 		audioSource.Play ();
 		stageSelection.SetActive (true);
+		titleScreen.SetActive (false);
 	}
 
 	public void LoadTrial1 () {

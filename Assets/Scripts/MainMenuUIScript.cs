@@ -16,23 +16,58 @@ public class MainMenuUIScript : MonoBehaviour {
 
 	public void LoadTrial2 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Beta Stage 2");
+		SceneManager.LoadScene("Pushup Level 1");
 	}
 
 	public void LoadTrial3 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Beta Stage 3");
+		SceneManager.LoadScene("Handstand Level 3");
 	}
 
 	public void LoadTrial4 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Stage4Scene");
+		SceneManager.LoadScene("HandLevel 2");
 	}
 
     public void LoadTrial5 () {
         Time.timeScale = 1f;
-		SceneManager.LoadScene("Stage5Scene");
+		SceneManager.LoadScene("Pushup Level 2");
     }
+
+	public void LoadTrial6 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Handlevel 3");
+	}
+
+	public void LoadTrial7 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Yoga Level 1");
+	}
+
+	public void LoadTrial8 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Handstand Level 1");
+	}
+
+	public void LoadTrial9 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Yoga Level 2");
+	}
+
+	public void LoadTrial10 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Handstand Level 2");
+	}
+
+	public void LoadTrial11 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Pushup Level 3");
+	}
+
+	public void LoadTrial12 () {
+		Time.timeScale = 1f;
+		SceneManager.LoadScene("Yoga Level 3");
+	}
 
     public void LoadTutorial () {
         Time.timeScale = 1f;
